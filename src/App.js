@@ -9,13 +9,7 @@ class App extends Component {
     this.refreshList= this.refreshList.bind()
     this.state={
       displayItems:[],
-      // activeItem:{
-      //   hotel:"",
-      //   cuisine:"",
-      //   location:"",
-      //   description:""
-
-      // },
+      
     };
   }
 
@@ -25,7 +19,7 @@ class App extends Component {
 
   refreshList = async () => {
     try{
-        const response = await axios.get("/buses")
+        const response = await axios.get("/buses/")
         console.log("Response", response)
         const jsonResponse = response.data
         console.log("jsonResponse", jsonResponse)
