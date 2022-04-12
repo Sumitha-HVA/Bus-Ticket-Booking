@@ -1,81 +1,85 @@
 import './App.css';
 import React,{Component} from 'react';
-import { Link } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+import axios from "axios";
 
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.refreshList= this.refreshList.bind()
+    this.state={
+      displayItems:[],
+      // activeItem:{
+      //   hotel:"",
+      //   cuisine:"",
+      //   location:"",
+      //   description:""
 
-const data =[
-  {
-    Bus_Name :" KSRTC ",
-    Src : " K.G.F ",
-    Dest : "Bengaluru",
-    Tickets : " 25 ",
-    Tickets_avail :" 20",
-    Date : " 30/3/2022 ",
-    Time : "5:30 pm"
-  },
-
-  {
-    Bus_Name :" Prakruthi Travels",
-    Src : " Bengaluru ",
-    Dest : " Sakleshpur",
-    Tickets : " 25 ",
-    Tickets_avail :" 10",
-    Date : " 3/4/2022 ",
-    Time : "6:00 am"
-  },
-
-  {
-    Bus_Name :" Neha Travels",
-    Src : " Bengaluru ",
-    Dest : " Mysore",
-    Tickets : " 20 ",
-    Tickets_avail :" 15",
-    Date : " 5/4/2022 ",
-    Time : "8:30 am"
+      // },
+    };
   }
 
-]
+  componentDidMount() {
+    this.refreshList();
+  }
 
-function App () {
-      return(
-          <>
-              <nav className="main-nav">
-                  {/*website-Name */}
-                  <div className="website-name">
-                      <h2> BUS TICKET BOOKING </h2> 
-                  </div>
-              </nav>
-            <table>
-              <thead>
-                <tr>
-                  <th>Bus_Name</th>
-                  <th>Src</th>
-                  <th>Dest</th>
-                  <th>Tickets_avail</th>
-                  <th>Tickets</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                </tr>
-                {data.map((val, key) => {
-                  return (
-                    <tr key={key}>
-                      <td>{val.Bus_Name}</td>
-                      <td>{val.Src}</td>
-                      <td>{val.Dest}</td>
-                      <td>{val.Tickets_avail}</td>
-                      <td>{val.Tickets}</td>
-                      <td>{val.Date}</td>
-                      <td>{val.Time}</td>
-                    </tr>
-                  )
-                })}
-              </thead>
-            </table>
-              
-          </>
+  refreshList = async () => {
+    try{
+        const response = await axios.get("/buses")
+        console.log("Response", response)
+        const jsonResponse = response.data
+        console.log("jsonResponse", jsonResponse)
+        this.setState({displayItems: jsonResponse})
+
+    }catch(err){
+        console.log("ERR: ", err)
+    }
+
+}
+  // refreshList = () => {
+  //   axios
+  //       .get("/display/zoggys")
+  //       .then((res) => {
+  //           console.log("response", res)
+  //           this.setState({ displayItems: res.data })
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       });
+  // }
+  render(){
+  return (
+        <div>
+          <h1>Bus Ticket Booking</h1>
+          <nav
+            style={{
+              borderBottom: "solid 1px",
+              paddingBottom: "1rem",
+            }}
+          >
+            <Link to="/buses">Buses</Link> |{" "}
+          </nav>
+          <Outlet />
+        </div>
       );
-  
+}
 }
 
 
+// export default function App() {
+//   return (
+//     <div>
+//       <h1>Bus Ticket Booking</h1>
+//       <nav
+//         style={{
+//           borderBottom: "solid 1px",
+//           paddingBottom: "1rem",
+//         }}
+//       >
+//         <Link to="/buses">Buses</Link> |{" "}
+//       </nav>
+//       <Outlet />
+//     </div>
+//   );
+// }
 export default App;
